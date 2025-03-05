@@ -1,4 +1,4 @@
-package edu.guilford.processing;
+package edu.guilford.chemtools;
 
 public class Solution {
 

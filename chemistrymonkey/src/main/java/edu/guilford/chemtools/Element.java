@@ -1,4 +1,4 @@
-package edu.guilford.processing;
+package edu.guilford.chemtools;
 
 import java.io.FileReader;
 
@@ -61,5 +61,27 @@ public class Element {
             valenceElectrons = 8;
         }
     }
+
+    //  Getters
+    public String getAtomicSymbol() {
+        return atomicSymbol;
+    }
+
+    public String getElementName() {
+        return elementName;
+    }
+
+    public int getAtomicNumber() {
+        return atomicNumber;
+    }
+
+    public double getAtomicMass() {
+        return atomicMass;
+    }
+
+    public int getValenceElectrons() {
+        return valenceElectrons;
+    }
+
     
 }
