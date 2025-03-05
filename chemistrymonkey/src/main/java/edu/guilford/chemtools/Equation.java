@@ -1,11 +1,14 @@
 package edu.guilford.chemtools;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Equation {
     
     private int[] leftElementTotals, rightElementTotals; // Create an array to store element totals for the left and right sides (118 elemenents (ignore index 0))
-    private int leftChargeTotal, rightChargeTotal; // Formula charge totals
+    private AtomicInteger leftChargeTotal = new AtomicInteger(0); // Formula charge totals
+    private AtomicInteger rightChargeTotal = new AtomicInteger(0);
+    public static final int MULTIPLIER_MAX = 20; // Max multiplier checked
 
     // Formula lists
     private ArrayList<Formula> leftFormulas, rightFormulas; 
@@ -46,26 +49,38 @@ public class Equation {
             formula.setMultiplier(1);
         }
 
-        int maxAttempts = 1000; // Limit to prevent infinite loops
-        int attempt = 0;
+        // Temp array
+        ArrayList<Formula> combinedFormulas = new ArrayList<>();
+        combinedFormulas.addAll(leftFormulas);
+        combinedFormulas.addAll(rightFormulas);
 
-        while (!isBalanced() && attempt < maxAttempts) {
-            attempt++;
-            
-            // Generate and test multipliers
-            for (int l1 = 1; l1 <= attempt; l1++) {
-                leftFormulas.get(0).setMultiplier(l1);
-                for (int l2 = 1; l2 <= attempt; l2++) {
-                    if (leftFormulas.size() > 1) leftFormulas.get(1).setMultiplier(l2);
-                    for (int r1 = 1; r1 <= attempt; r1++) {
-                        rightFormulas.get(0).setMultiplier(r1);
-                        for (int r2 = 1; r2 <= attempt; r2++) {
-                            if (rightFormulas.size() > 1) rightFormulas.get(1).setMultiplier(r2);
-                        }
-                    }
-                }
+        // Generate values
+        int[][] testValues = generateValues(combinedFormulas.size());
+
+        // Balance equation
+        for (int i = 0; i < testValues.length; i++) {
+            for (int j = 0; j < combinedFormulas.size(); j++) {
+                combinedFormulas.get(j).setMultiplier(testValues[i][j]);
+            }
+            if (isBalanced()) {
+                return;
             }
         }
+    }
+
+    private int[][] generateValues(int formulaCount) {
+        int combinationSets = (int) Math.pow(MULTIPLIER_MAX, formulaCount);
+        int[][] testValues = new int[combinationSets][formulaCount]; // Each valueSet contains the subarray of values for each formula to be checked
+
+        for (int i = 0; i < combinationSets; i++) {
+            int value = i;
+            for (int j = formulaCount - 1; j >= 0; j--) {
+                testValues[i][j] = (value % MULTIPLIER_MAX) + 1;
+                value /= MULTIPLIER_MAX;
+            }
+        }
+
+        return testValues;
     }
 
     public boolean isBalanced() {
@@ -76,7 +91,7 @@ public class Equation {
         sumCounters(rightFormulas, rightElementTotals, rightChargeTotal);
 
         // Check charge balance
-        if (leftChargeTotal != rightChargeTotal) {
+        if (leftChargeTotal.get() != rightChargeTotal.get()) {
             return false;
         }
 
@@ -91,7 +106,7 @@ public class Equation {
     }
 
     // Calculate element and charge totals
-    private void sumCounters(ArrayList<Formula> formulas, int[] elementTotals, int chargeTotal) {
+    private void sumCounters(ArrayList<Formula> formulas, int[] elementTotals, AtomicInteger chargeTotal) {
         for (Formula formula : formulas) {
             // Calculate element totals
             for (Element element : formula.getElementComponents()) {
@@ -99,7 +114,7 @@ public class Equation {
             }
 
             // Calculate charge totals
-            chargeTotal += formula.getCharge() * formula.getMultiplier();
+            chargeTotal.addAndGet(formula.getCharge() * formula.getMultiplier());
         }
     }
 
@@ -110,8 +125,8 @@ public class Equation {
             rightElementTotals[i] = 0;
         }
 
-        leftChargeTotal = 0;
-        rightChargeTotal = 0;
+        leftChargeTotal.set(0);
+        rightChargeTotal.set(0);
     }
 
     // Clear method
@@ -124,16 +139,23 @@ public class Equation {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Equation is ").append(isBalanced() ? "balanced" : "not balanced").append("\n");
+        sb.append("The equation is ").append(isBalanced() ? "balanced" : "not balanced").append("\n");
 
-        sb.append("Left side:\n");
         for (Formula formula : leftFormulas) {
-            sb.append(formula.getMultiplier()).append(formula.toString()).append(")\n");
+            sb.append(formula.getMultiplier()).append(formula.toString());
+            if (formula != leftFormulas.get(leftFormulas.size() - 1)) {
+                sb.append(" + ");
+            }
+            else {
+                sb.append(" = ");
+            }
         }
 
-        sb.append("Right side:\n");
         for (Formula formula : rightFormulas) {
-            sb.append(formula.getMultiplier()).append(formula.toString()).append(")\n");
+            sb.append(formula.getMultiplier()).append(formula.toString());
+            if (formula != rightFormulas.get(rightFormulas.size() - 1)) {
+                sb.append(" + ");
+            }
         }
 
         return sb.toString();

@@ -30,7 +30,7 @@ public class EquationApplication extends BaseApplication {
     protected String setMenuImageLocation() {
         return "file:chemistrymonkey/src/main/resources/edu/guilford/EquationBalancerLogo.png";
     }
-        
+
     @Override
     protected GridPane getMainPane() {
         GridPane mainPane = new GridPane();
@@ -47,12 +47,12 @@ public class EquationApplication extends BaseApplication {
         mainPane.getColumnConstraints().addAll(col1, col2);
 
         Font headerFont = Font.font("Arial", FontWeight.BOLD, 16);
-        
+
         Label leftHeader = new Label("Reactants");
         leftHeader.setFont(headerFont);
         leftHeader.setAlignment(Pos.CENTER);
         GridPane.setHalignment(leftHeader, HPos.CENTER);
-        
+
         Label rightHeader = new Label("Products");
         rightHeader.setFont(headerFont);
         rightHeader.setAlignment(Pos.CENTER);
@@ -61,7 +61,7 @@ public class EquationApplication extends BaseApplication {
         VBox leftBox = new VBox(10);
         leftBox.setPrefWidth(250);
         leftBox.setAlignment(Pos.TOP_CENTER);
-        
+
         VBox rightBox = new VBox(10);
         rightBox.setPrefWidth(250);
         rightBox.setAlignment(Pos.TOP_CENTER);
@@ -70,14 +70,14 @@ public class EquationApplication extends BaseApplication {
         Button addRight = new Button("+ Add Product");
         Button solveButton = new Button("Solve Equation");
         solveButton.setMaxWidth(Double.MAX_VALUE);
-        
+
         Label resultLabel = new Label();
         resultLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         resultLabel.setWrapText(true);
         resultLabel.setMaxWidth(550);
         resultLabel.setAlignment(Pos.CENTER);
         GridPane.setHalignment(resultLabel, HPos.CENTER);
-        
+
         addLeft.setOnAction(e -> addFormulaField(leftBox));
         addRight.setOnAction(e -> addFormulaField(rightBox));
         solveButton.setOnAction(e -> solveEquation(leftBox, rightBox, resultLabel));
@@ -111,32 +111,30 @@ public class EquationApplication extends BaseApplication {
         equation.clear();
         for (Node node : leftBox.getChildren()) {
             if (node instanceof HBox) {
-            HBox hbox = (HBox) node;
-            for (Node innerNode : hbox.getChildren()) {
-                if (innerNode instanceof TextField) {
-                TextField textField = (TextField) innerNode;
-                equation.addLeftFormula(new Formula(textField.getText()));
+                HBox hbox = (HBox) node;
+                for (Node innerNode : hbox.getChildren()) {
+                    if (innerNode instanceof TextField) {
+                        TextField textField = (TextField) innerNode;
+                        equation.addLeftFormula(new Formula(textField.getText()));
+                    }
                 }
-            }
             }
         }
 
         for (Node node : rightBox.getChildren()) {
             if (node instanceof HBox) {
-            HBox hbox = (HBox) node;
-            for (Node innerNode : hbox.getChildren()) {
-                if (innerNode instanceof TextField) {
-                TextField textField = (TextField) innerNode;
-                equation.addRightFormula(new Formula(textField.getText()));
+                HBox hbox = (HBox) node;
+                for (Node innerNode : hbox.getChildren()) {
+                    if (innerNode instanceof TextField) {
+                        TextField textField = (TextField) innerNode;
+                        equation.addRightFormula(new Formula(textField.getText()));
+                    }
                 }
-            }
             }
         }
 
         // Solve
         equation.balanceEquations();
-        resultLabel.setText("Balanced Equation: " + equation.toString());
+        resultLabel.setText("(Max Coefficient Checked: " + Equation.MULTIPLIER_MAX + "): " + equation.toString());
     }
-
-    
 }
