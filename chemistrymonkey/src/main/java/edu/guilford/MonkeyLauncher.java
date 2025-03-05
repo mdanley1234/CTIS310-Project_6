@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import edu.guilford.applications.BaseApplication;
+import edu.guilford.applications.EquationApplication;
+import edu.guilford.applications.MoleApplication;
 import edu.guilford.applications.TestApplication;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +61,8 @@ public class MonkeyLauncher extends Application {
         ArrayList<BaseApplication> applicationList = new ArrayList<>();
 
         // TODO: Add applications
+        applicationList.add(new EquationApplication(this));
+        applicationList.add(new MoleApplication(this));
         applicationList.add(new TestApplication(this));
 
         return applicationList;

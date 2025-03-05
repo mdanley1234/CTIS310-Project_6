@@ -30,7 +30,7 @@ public class MainPane extends VBox {
 
         // Create header label component
         Label header = new Label("Application Launcher");
-        header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        header.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
 
         // Create topSection container
         VBox topSection = new VBox(10, imageView, header);
