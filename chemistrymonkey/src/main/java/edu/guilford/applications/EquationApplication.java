@@ -18,19 +18,41 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * The EquationApplication class provides a GUI for balancing chemical equations.
+ * It extends BaseApplication and allows the user to input chemical formulas for reactants and products,
+ * solve the equation, and display the balanced equation.
+ */
 public class EquationApplication extends BaseApplication {
 
     private Equation equation = new Equation();
 
+    /**
+     * Constructs the EquationApplication with a given launcher.
+     *
+     * @param launcher the MonkeyLauncher used for scene switching
+     */
     public EquationApplication(MonkeyLauncher launcher) {
         super(launcher);
     }
 
+    /**
+     * Returns the location of the menu image for the application.
+     *
+     * @return the image location as a string
+     */
     @Override
     protected String setMenuImageLocation() {
         return "file:chemistrymonkey/src/main/resources/edu/guilford/EquationBalancerLogo.png";
     }
 
+    /**
+     * Generates the main content for the EquationApplication scene.
+     * This includes the input fields for reactants and products, buttons for adding formulas,
+     * solving the equation, and displaying the result.
+     *
+     * @return the GridPane containing the main layout for the application
+     */
     @Override
     protected GridPane getMainPane() {
         GridPane mainPane = new GridPane();
@@ -40,12 +62,14 @@ public class EquationApplication extends BaseApplication {
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setPrefWidth(600);
 
+        // Define column constraints to make the columns flexible
         ColumnConstraints col1 = new ColumnConstraints(250, 250, Double.MAX_VALUE);
         col1.setHgrow(Priority.ALWAYS);
         ColumnConstraints col2 = new ColumnConstraints(250, 250, Double.MAX_VALUE);
         col2.setHgrow(Priority.ALWAYS);
         mainPane.getColumnConstraints().addAll(col1, col2);
 
+        // Create headers for the reactant and product columns
         Font headerFont = Font.font("Arial", FontWeight.BOLD, 16);
 
         Label leftHeader = new Label("Reactants");
@@ -58,6 +82,7 @@ public class EquationApplication extends BaseApplication {
         rightHeader.setAlignment(Pos.CENTER);
         GridPane.setHalignment(rightHeader, HPos.CENTER);
 
+        // Create VBox containers for reactant and product formula fields
         VBox leftBox = new VBox(10);
         leftBox.setPrefWidth(250);
         leftBox.setAlignment(Pos.TOP_CENTER);
@@ -66,11 +91,13 @@ public class EquationApplication extends BaseApplication {
         rightBox.setPrefWidth(250);
         rightBox.setAlignment(Pos.TOP_CENTER);
 
+        // Create buttons for adding formulas and solving the equation
         Button addLeft = new Button("+ Add Reactant");
         Button addRight = new Button("+ Add Product");
         Button solveButton = new Button("Solve Equation");
         solveButton.setMaxWidth(Double.MAX_VALUE);
 
+        // Create label to display the result
         Label resultLabel = new Label();
         resultLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         resultLabel.setWrapText(true);
@@ -78,10 +105,12 @@ public class EquationApplication extends BaseApplication {
         resultLabel.setAlignment(Pos.CENTER);
         GridPane.setHalignment(resultLabel, HPos.CENTER);
 
+        // Set button actions
         addLeft.setOnAction(e -> addFormulaField(leftBox));
         addRight.setOnAction(e -> addFormulaField(rightBox));
         solveButton.setOnAction(e -> solveEquation(leftBox, rightBox, resultLabel));
 
+        // Add all components to the main layout
         mainPane.add(leftHeader, 0, 0);
         mainPane.add(rightHeader, 1, 0);
         mainPane.add(leftBox, 0, 1);
@@ -94,6 +123,12 @@ public class EquationApplication extends BaseApplication {
         return mainPane;
     }
 
+    /**
+     * Adds a new formula input field to the specified VBox.
+     * Each formula field has a corresponding "remove" button.
+     *
+     * @param box the VBox to add the formula field to (either reactants or products)
+     */
     private void addFormulaField(VBox box) {
         HBox formulaRow = new HBox(10);
         formulaRow.setAlignment(Pos.CENTER);
@@ -105,9 +140,17 @@ public class EquationApplication extends BaseApplication {
         box.getChildren().add(formulaRow);
     }
 
+    /**
+     * Solves the equation by balancing the formulas entered for reactants and products.
+     * The equation is solved using the Equation class, and the result is displayed in the result label.
+     *
+     * @param leftBox the VBox containing the reactant formulas
+     * @param rightBox the VBox containing the product formulas
+     * @param resultLabel the label to display the result
+     */
     private void solveEquation(VBox leftBox, VBox rightBox, Label resultLabel) {
 
-        // Populate the equations object
+        // Populate the equations object with the formulas from the UI
         equation.clear();
         for (Node node : leftBox.getChildren()) {
             if (node instanceof HBox) {
@@ -133,7 +176,7 @@ public class EquationApplication extends BaseApplication {
             }
         }
 
-        // Solve
+        // Solve the equation
         equation.balanceEquations();
         resultLabel.setText("(Max Coefficient Checked: " + Equation.MULTIPLIER_MAX + "): " + equation.toString());
     }

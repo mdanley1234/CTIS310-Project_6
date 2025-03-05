@@ -11,131 +11,193 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * BaseApplication is an abstract class representing the structure of an application within
+ * the Monkey Launcher framework. It handles the scene generation, menu display, and 
+ * launching functionality of an individual application.
+ */
 public abstract class BaseApplication {
 
-    // Application scene components
+    /** The application scene */
     protected Scene applicationScene;
 
-    // Monkey launcher for scene switching
+    /** Reference to the MonkeyLauncher for scene switching */
     protected MonkeyLauncher launcher;
 
-    // Scaling factors
-    private static double menuImageWidthFactor = 0.7;
-    private static double menuImageHeightFactor = 0.2;
+    /** Scaling factors for the menu image size */
+    private static final double MENU_IMAGE_WIDTH_FACTOR = 0.7;
+    private static final double MENU_IMAGE_HEIGHT_FACTOR = 0.27;
 
-    // Menu box components
+    /** The menu box containing the application logo and launch button */
     private HBox applicationMenuBox;
 
+    /**
+     * Abstract method to set the location of the menu image for each application.
+     * 
+     * @return The file path of the menu image.
+     */
     protected abstract String setMenuImageLocation();
 
+    /**
+     * Constructs a BaseApplication with the given MonkeyLauncher and initializes
+     * the menu box and application scene.
+     * 
+     * @param launcher The MonkeyLauncher used to switch scenes.
+     */
     public BaseApplication(MonkeyLauncher launcher) {
         this.launcher = launcher;
         generateMenuBox();
         generateApplication();
     }
 
-    // Generate applicationMenuBox
+    /**
+     * Generates the application menu box, including the logo image and the launch button.
+     * This method is responsible for setting the layout of the application in the main menu.
+     */
     private void generateMenuBox() {
-        // Create applicationMenuBox (TODO: ADD BUTTON AND FUNCTIONALITY)
-
+        // Create the application menu box (holds the image and launch button)
         applicationMenuBox = new HBox();
         applicationMenuBox.setAlignment(Pos.CENTER_LEFT);
         applicationMenuBox.setSpacing(15);
 
-        // Create logo image component
-        ImageView imageView;
-        try {
-            imageView = new ImageView(new Image(setMenuImageLocation()));
-            imageView.setFitHeight(MonkeyLauncher.applicationHeight * menuImageHeightFactor); // TODO
-            imageView.setFitWidth(MonkeyLauncher.applicationWidth * menuImageWidthFactor); // TODO
-            imageView.setPreserveRatio(false);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error loading image: " + setMenuImageLocation());
-            imageView = new ImageView(); // Placeholder if image fails to load
-        }
+        // Create the logo image component
+        ImageView imageView = createImageView(setMenuImageLocation(), 
+                                              MonkeyLauncher.applicationWidth * MENU_IMAGE_WIDTH_FACTOR,
+                                              MonkeyLauncher.applicationHeight * MENU_IMAGE_HEIGHT_FACTOR);
 
-        // Create launch button
-        Button launchButton = new Button("Launch\nApplication");
-        launchButton.setPrefWidth(MonkeyLauncher.applicationWidth * (0.9 - menuImageWidthFactor));
-        launchButton.setPrefHeight(MonkeyLauncher.applicationHeight * menuImageHeightFactor);
+        // Create the launch button
+        Button launchButton = createLaunchButton();
 
-        // Button formatting
-        // Customize button appearance
-        launchButton.setStyle(
-                "-fx-font-size: 16px; "
-                + // Font size
-                "-fx-font-weight: bold; "
-                + // Font weight (bold)
-                "-fx-font-family: 'Arial'; "
-                + // Font family
-                "-fx-text-fill: white; "
-                + // Text color
-                "-fx-background-color: #4CAF50; "
-                + // Background color
-                "-fx-background-radius: 20px; "
-                + // Rounded corners
-                "-fx-padding: 10px 20px; "
-                + // Padding inside the button
-                "-fx-border-color: #388E3C; "
-                + // Border color
-                "-fx-border-width: 2px; "
-                + // Border width
-                "-fx-border-radius: 20px;");        // Border radius for rounded edges
+        // Add components to the menu box
+        applicationMenuBox.getChildren().addAll(imageView, launchButton);
 
-        // Optional: Adding hover effects for interactivity
-        launchButton.setOnMouseEntered(e -> {
-            launchButton.setStyle(
-                    "-fx-font-size: 16px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-font-family: 'Arial'; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-background-color: #45a049; "
-                    + // Darker shade for hover effect
-                    "-fx-background-radius: 20px; "
-                    + "-fx-padding: 10px 20px; "
-                    + "-fx-border-color: #388E3C; "
-                    + "-fx-border-width: 2px; "
-                    + "-fx-border-radius: 20px;");
-        });
-
-        launchButton.setOnMouseExited(e -> {
-            launchButton.setStyle(
-                    "-fx-font-size: 16px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-font-family: 'Arial'; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-background-color: #4CAF50; "
-                    + "-fx-background-radius: 20px; "
-                    + "-fx-padding: 10px 20px; "
-                    + "-fx-border-color: #388E3C; "
-                    + "-fx-border-width: 2px; "
-                    + "-fx-border-radius: 20px;");
-        });
-
-        applicationMenuBox.getChildren().add(imageView);
-        applicationMenuBox.getChildren().add(launchButton);
-
-        // Button Functionality
-        launchButton.setOnAction(e -> {
-            launcher.switchScene(applicationScene);
-        });
+        // Button functionality: Launch the application when clicked
+        launchButton.setOnAction(e -> launcher.switchScene(applicationScene));
     }
 
-    // Generate the scene
+    /**
+     * Creates an ImageView for the application logo.
+     * 
+     * @param imagePath The path to the image.
+     * @param width The desired width of the image.
+     * @param height The desired height of the image.
+     * @return The created ImageView.
+     */
+    private ImageView createImageView(String imagePath, double width, double height) {
+        ImageView imageView;
+        try {
+            imageView = new ImageView(new Image(imagePath));
+            imageView.setFitWidth(width);
+            imageView.setFitHeight(height);
+            imageView.setPreserveRatio(false);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error loading image: " + imagePath);
+            imageView = new ImageView(); // Placeholder if image fails to load
+        }
+        return imageView;
+    }
+
+    /**
+     * Creates the launch button with specific styling and hover effects.
+     * 
+     * @return The configured Button object.
+     */
+    private Button createLaunchButton() {
+        Button launchButton = new Button("Launch\nApplication");
+        launchButton.setPrefWidth(MonkeyLauncher.applicationWidth * (0.9 - MENU_IMAGE_WIDTH_FACTOR));
+        launchButton.setPrefHeight(MonkeyLauncher.applicationHeight * MENU_IMAGE_HEIGHT_FACTOR);
+
+        // Styling for the launch button
+        launchButton.setStyle("-fx-font-size: 20px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #4CAF50; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 10px 20px; "
+                + "-fx-border-color: #388E3C; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;");
+
+        // Hover effect for the button
+        launchButton.setOnMouseEntered(e -> launchButton.setStyle(
+                "-fx-font-size: 20px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #45a049; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 10px 20px; "
+                + "-fx-border-color: #388E3C; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;"));
+
+        launchButton.setOnMouseExited(e -> launchButton.setStyle(
+                "-fx-font-size: 20px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #4CAF50; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 10px 20px; "
+                + "-fx-border-color: #388E3C; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;"));
+
+        return launchButton;
+    }
+
+    /**
+     * Generates the main application scene, including the back button and main content.
+     * Sets the scene for this application.
+     */
     private void generateApplication() {
         VBox applicationContainer = new VBox();
 
-        // Create a container for the back button and label
+        // Create the header with the back button and logo
+        HBox headerContainer = createHeaderContainer();
+
+        // Add components to the application container
+        applicationContainer.getChildren().addAll(headerContainer, getMainPane());
+
+        // Set the scene
+        applicationScene = new Scene(applicationContainer, MonkeyLauncher.applicationWidth, MonkeyLauncher.applicationHeight);
+    }
+
+    /**
+     * Creates the header container with a back button and logo image.
+     * 
+     * @return The HBox containing the header.
+     */
+    private HBox createHeaderContainer() {
         HBox headerContainer = new HBox();
         headerContainer.setAlignment(Pos.TOP_LEFT);
         headerContainer.setPadding(new Insets(10, 15, 10, 15));
         headerContainer.setSpacing(MonkeyLauncher.applicationWidth * 0.11);
         headerContainer.setStyle("-fx-border-color: black; -fx-border-width: 6px;");
 
-        // Create back button
+        // Create the back button
+        Button backButton = createBackButton();
+
+        // Create logo image for the header
+        ImageView imageView = createImageView(setMenuImageLocation(), 
+                                              MonkeyLauncher.applicationWidth * MENU_IMAGE_WIDTH_FACTOR * 0.7, 
+                                              MonkeyLauncher.applicationHeight * MENU_IMAGE_HEIGHT_FACTOR * 0.7);
+
+        // Add components to the header
+        headerContainer.getChildren().addAll(backButton, imageView);
+
+        return headerContainer;
+    }
+
+    /**
+     * Creates the back button with specific styling and hover effects.
+     * 
+     * @return The configured Button object.
+     */
+    private Button createBackButton() {
         Button backButton = new Button("Return\nHome");
-        backButton.setStyle(
-                "-fx-font-size: 18px; "
+        backButton.setStyle("-fx-font-size: 18px; "
                 + "-fx-font-weight: bold; "
                 + "-fx-font-family: 'Arial'; "
                 + "-fx-text-fill: white; "
@@ -146,69 +208,51 @@ public abstract class BaseApplication {
                 + "-fx-border-width: 2px; "
                 + "-fx-border-radius: 20px;");
 
-        // Optional: Adding hover effects for interactivity
-        backButton.setOnMouseEntered(e -> {
-            backButton.setStyle(
-                    "-fx-font-size: 18px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-font-family: 'Arial'; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-background-color: #e53935; "
-                    + "-fx-background-radius: 20px; "
-                    + "-fx-padding: 5px 15px; "
-                    + "-fx-border-color: #d32f2f; "
-                    + "-fx-border-width: 2px; "
-                    + "-fx-border-radius: 20px;");
-        });
+        // Hover effect for the back button
+        backButton.setOnMouseEntered(e -> backButton.setStyle(
+                "-fx-font-size: 18px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #e53935; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 5px 15px; "
+                + "-fx-border-color: #d32f2f; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;"));
 
-        backButton.setOnMouseExited(e -> {
-            backButton.setStyle(
-                    "-fx-font-size: 18px; "
-                    + "-fx-font-weight: bold; "
-                    + "-fx-font-family: 'Arial'; "
-                    + "-fx-text-fill: white; "
-                    + "-fx-background-color: #f44336; "
-                    + "-fx-background-radius: 20px; "
-                    + "-fx-padding: 5px 15px; "
-                    + "-fx-border-color: #d32f2f; "
-                    + "-fx-border-width: 2px; "
-                    + "-fx-border-radius: 20px;");
-        });
+        backButton.setOnMouseExited(e -> backButton.setStyle(
+                "-fx-font-size: 18px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #f44336; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 5px 15px; "
+                + "-fx-border-color: #d32f2f; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;"));
 
         // Back button functionality
-        backButton.setOnAction(e -> {
-            launcher.goHome();
-        });
+        backButton.setOnAction(e -> launcher.goHome());
 
-        // Create logo image component
-        ImageView imageView;
-        try {
-            imageView = new ImageView(new Image(setMenuImageLocation()));
-            imageView.setFitHeight(MonkeyLauncher.applicationHeight * menuImageHeightFactor * 0.7); // TODO
-            imageView.setFitWidth(MonkeyLauncher.applicationWidth * menuImageWidthFactor * 0.7); // TODO
-            imageView.setPreserveRatio(false);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error loading image: " + setMenuImageLocation());
-            imageView = new ImageView(); // Placeholder if image fails to load
-        }
-
-        // Add back button and label to the container
-        headerContainer.getChildren().addAll(backButton, imageView);
-
-        // Add header container to the application container
-        applicationContainer.getChildren().add(headerContainer);
-        applicationContainer.getChildren().add(getMainPane());
-
-        // Set the scene
-        applicationScene = new Scene(applicationContainer, MonkeyLauncher.applicationWidth, MonkeyLauncher.applicationHeight);
+        return backButton;
     }
 
-    // Application mainContainer generation
+    /**
+     * Abstract method for generating the main content pane of the application.
+     * This must be implemented by subclasses to define the specific layout of the app.
+     * 
+     * @return A GridPane representing the main content of the application.
+     */
     protected abstract GridPane getMainPane();
 
-    // Return methods
+    /**
+     * Returns the application menu box, which contains the application logo and launch button.
+     * 
+     * @return The HBox containing the application menu components.
+     */
     public HBox getApplicationMenuBox() {
         return applicationMenuBox;
     }
-
 }
