@@ -61,8 +61,8 @@ public class MonkeyLauncher extends Application {
         ArrayList<BaseApplication> applicationList = new ArrayList<>();
 
         // TODO: Add applications
-        applicationList.add(new EquationApplication(this));
         applicationList.add(new MoleApplication(this));
+        applicationList.add(new EquationApplication(this));
         applicationList.add(new TestApplication(this));
 
         return applicationList;

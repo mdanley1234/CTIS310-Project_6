@@ -25,6 +25,7 @@ public abstract class BaseApplication {
 
     // Menu box components
     private HBox applicationMenuBox;
+
     protected abstract String setMenuImageLocation();
 
     public BaseApplication(MonkeyLauncher launcher) {
@@ -59,47 +60,57 @@ public abstract class BaseApplication {
         launchButton.setPrefHeight(MonkeyLauncher.applicationHeight * menuImageHeightFactor);
 
         // Button formatting
-                // Customize button appearance
-                launchButton.setStyle(
-                    "-fx-font-size: 16px; " +           // Font size
-                    "-fx-font-weight: bold; " +         // Font weight (bold)
-                    "-fx-font-family: 'Arial'; " +      // Font family
-                    "-fx-text-fill: white; " +          // Text color
-                    "-fx-background-color: #4CAF50; " + // Background color
-                    "-fx-background-radius: 20px; " +   // Rounded corners
-                    "-fx-padding: 10px 20px; " +        // Padding inside the button
-                    "-fx-border-color: #388E3C; " +     // Border color
-                    "-fx-border-width: 2px; " +         // Border width
-                    "-fx-border-radius: 20px;");        // Border radius for rounded edges
-    
-            // Optional: Adding hover effects for interactivity
-            launchButton.setOnMouseEntered(e -> {
-                launchButton.setStyle(
-                        "-fx-font-size: 16px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: 'Arial'; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-background-color: #45a049; " + // Darker shade for hover effect
-                        "-fx-background-radius: 20px; " +
-                        "-fx-padding: 10px 20px; " +
-                        "-fx-border-color: #388E3C; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-radius: 20px;");
-            });
-    
-            launchButton.setOnMouseExited(e -> {
-                launchButton.setStyle(
-                        "-fx-font-size: 16px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-font-family: 'Arial'; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-background-color: #4CAF50; " +
-                        "-fx-background-radius: 20px; " +
-                        "-fx-padding: 10px 20px; " +
-                        "-fx-border-color: #388E3C; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-radius: 20px;");
-            });
+        // Customize button appearance
+        launchButton.setStyle(
+                "-fx-font-size: 16px; "
+                + // Font size
+                "-fx-font-weight: bold; "
+                + // Font weight (bold)
+                "-fx-font-family: 'Arial'; "
+                + // Font family
+                "-fx-text-fill: white; "
+                + // Text color
+                "-fx-background-color: #4CAF50; "
+                + // Background color
+                "-fx-background-radius: 20px; "
+                + // Rounded corners
+                "-fx-padding: 10px 20px; "
+                + // Padding inside the button
+                "-fx-border-color: #388E3C; "
+                + // Border color
+                "-fx-border-width: 2px; "
+                + // Border width
+                "-fx-border-radius: 20px;");        // Border radius for rounded edges
+
+        // Optional: Adding hover effects for interactivity
+        launchButton.setOnMouseEntered(e -> {
+            launchButton.setStyle(
+                    "-fx-font-size: 16px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-font-family: 'Arial'; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-background-color: #45a049; "
+                    + // Darker shade for hover effect
+                    "-fx-background-radius: 20px; "
+                    + "-fx-padding: 10px 20px; "
+                    + "-fx-border-color: #388E3C; "
+                    + "-fx-border-width: 2px; "
+                    + "-fx-border-radius: 20px;");
+        });
+
+        launchButton.setOnMouseExited(e -> {
+            launchButton.setStyle(
+                    "-fx-font-size: 16px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-font-family: 'Arial'; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-background-color: #4CAF50; "
+                    + "-fx-background-radius: 20px; "
+                    + "-fx-padding: 10px 20px; "
+                    + "-fx-border-color: #388E3C; "
+                    + "-fx-border-width: 2px; "
+                    + "-fx-border-radius: 20px;");
+        });
 
         applicationMenuBox.getChildren().add(imageView);
         applicationMenuBox.getChildren().add(launchButton);
@@ -124,44 +135,44 @@ public abstract class BaseApplication {
         // Create back button
         Button backButton = new Button("Return\nHome");
         backButton.setStyle(
-            "-fx-font-size: 18px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: 'Arial'; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #f44336; " +
-            "-fx-background-radius: 20px; " +
-            "-fx-padding: 5px 15px; " +
-            "-fx-border-color: #d32f2f; " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 20px;");
-        
+                "-fx-font-size: 18px; "
+                + "-fx-font-weight: bold; "
+                + "-fx-font-family: 'Arial'; "
+                + "-fx-text-fill: white; "
+                + "-fx-background-color: #f44336; "
+                + "-fx-background-radius: 20px; "
+                + "-fx-padding: 5px 15px; "
+                + "-fx-border-color: #d32f2f; "
+                + "-fx-border-width: 2px; "
+                + "-fx-border-radius: 20px;");
+
         // Optional: Adding hover effects for interactivity
         backButton.setOnMouseEntered(e -> {
             backButton.setStyle(
-            "-fx-font-size: 18px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: 'Arial'; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #e53935; " +
-            "-fx-background-radius: 20px; " +
-            "-fx-padding: 5px 15px; " +
-            "-fx-border-color: #d32f2f; " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 20px;");
+                    "-fx-font-size: 18px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-font-family: 'Arial'; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-background-color: #e53935; "
+                    + "-fx-background-radius: 20px; "
+                    + "-fx-padding: 5px 15px; "
+                    + "-fx-border-color: #d32f2f; "
+                    + "-fx-border-width: 2px; "
+                    + "-fx-border-radius: 20px;");
         });
 
         backButton.setOnMouseExited(e -> {
             backButton.setStyle(
-            "-fx-font-size: 18px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-font-family: 'Arial'; " +
-            "-fx-text-fill: white; " +
-            "-fx-background-color: #f44336; " +
-            "-fx-background-radius: 20px; " +
-            "-fx-padding: 5px 15px; " +
-            "-fx-border-color: #d32f2f; " +
-            "-fx-border-width: 2px; " +
-            "-fx-border-radius: 20px;");
+                    "-fx-font-size: 18px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-font-family: 'Arial'; "
+                    + "-fx-text-fill: white; "
+                    + "-fx-background-color: #f44336; "
+                    + "-fx-background-radius: 20px; "
+                    + "-fx-padding: 5px 15px; "
+                    + "-fx-border-color: #d32f2f; "
+                    + "-fx-border-width: 2px; "
+                    + "-fx-border-radius: 20px;");
         });
 
         // Back button functionality

@@ -14,7 +14,7 @@ public class Element {
     private int valenceElectrons;
 
     // Periodic Table File Location
-    private static final String ELEMENTS_FILE = "chemistrymonkey/src/main/java/edu/guilford/processing/elementInformation.csv";
+    private static final String ELEMENTS_FILE = "chemistrymonkey/src/main/java/edu/guilford/chemtools/elementInformation.csv";
 
     // Pass in element atomic symbol
     public Element(String atomicSymbol) {

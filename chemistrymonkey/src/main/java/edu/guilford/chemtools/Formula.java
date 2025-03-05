@@ -73,7 +73,7 @@ public class Formula {
 
             //  Add elements to array
             for (int j = 0; j < elements.size(); j++) {
-                for (int k = 0; k < counts.size(); k++) {
+                for (int k = 0; k < counts.get(j); k++) {
                     elementComponents.add(new Element(elements.get(j)));
                 }
             }

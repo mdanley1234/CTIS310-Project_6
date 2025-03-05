@@ -34,4 +34,10 @@ public class Sample extends Formula {
         return sampleMoles;
     }
 
+    // Clear method
+    public void clear() {
+        sampleMass = 0;
+        sampleMass = 0;
+    }
+
 }

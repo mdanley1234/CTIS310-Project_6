@@ -44,4 +44,10 @@ public class Solution {
     public double getMolarity() {
         return molarity;
     }
+
+    // Clear method
+    public void clear() {
+        volume = 0;
+        molarity = 0;
+    }
 }
