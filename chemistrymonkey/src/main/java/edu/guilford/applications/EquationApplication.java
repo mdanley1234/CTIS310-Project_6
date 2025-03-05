@@ -1,9 +1,12 @@
 package edu.guilford.applications;
 
 import edu.guilford.MonkeyLauncher;
+import edu.guilford.chemtools.Equation;
+import edu.guilford.chemtools.Formula;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class EquationApplication extends BaseApplication {
+
+    private Equation equation = new Equation();
 
     public EquationApplication(MonkeyLauncher launcher) {
         super(launcher);
@@ -101,8 +106,36 @@ public class EquationApplication extends BaseApplication {
     }
 
     private void solveEquation(VBox leftBox, VBox rightBox, Label resultLabel) {
-        // Placeholder for balancing logic
-        resultLabel.setText("Balanced Equation: ...");
+
+        // Populate the equations object
+        equation.clear();
+        for (Node node : leftBox.getChildren()) {
+            if (node instanceof HBox) {
+            HBox hbox = (HBox) node;
+            for (Node innerNode : hbox.getChildren()) {
+                if (innerNode instanceof TextField) {
+                TextField textField = (TextField) innerNode;
+                equation.addLeftFormula(new Formula(textField.getText()));
+                }
+            }
+            }
+        }
+
+        for (Node node : rightBox.getChildren()) {
+            if (node instanceof HBox) {
+            HBox hbox = (HBox) node;
+            for (Node innerNode : hbox.getChildren()) {
+                if (innerNode instanceof TextField) {
+                TextField textField = (TextField) innerNode;
+                equation.addRightFormula(new Formula(textField.getText()));
+                }
+            }
+            }
+        }
+
+        // Solve
+        equation.balanceEquations();
+        resultLabel.setText("Balanced Equation: " + equation.toString());
     }
 
     

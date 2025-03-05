@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Equation {
     
-    private int[] leftElementTotals, rightElementTotals = new int[119]; // Create an array to store element totals for the left and right sides (118 elemenents (ignore index 0))
+    private int[] leftElementTotals, rightElementTotals; // Create an array to store element totals for the left and right sides (118 elemenents (ignore index 0))
     private int leftChargeTotal, rightChargeTotal; // Formula charge totals
 
     // Formula lists
@@ -13,6 +13,22 @@ public class Equation {
     public Equation(ArrayList<Formula> leftFormulas, ArrayList<Formula> rightFormulas) {
         this.leftFormulas = leftFormulas;
         this.rightFormulas = rightFormulas;
+    }
+
+    public Equation() {
+        leftFormulas = new ArrayList<Formula>();
+        rightFormulas = new ArrayList<Formula>();
+
+        leftElementTotals = new int[119];
+        rightElementTotals = new int[119];
+    }
+
+    // Add formulas
+    public void addLeftFormula(Formula formula) {
+        leftFormulas.add(formula);
+    }
+    public void addRightFormula(Formula formula) {
+        rightFormulas.add(formula);
     }
 
     // Method to automatically balance the equations
@@ -45,10 +61,6 @@ public class Equation {
                         rightFormulas.get(0).setMultiplier(r1);
                         for (int r2 = 1; r2 <= attempt; r2++) {
                             if (rightFormulas.size() > 1) rightFormulas.get(1).setMultiplier(r2);
-
-                            if (isBalanced()) {
-                                return;
-                            }
                         }
                     }
                 }
@@ -100,6 +112,31 @@ public class Equation {
 
         leftChargeTotal = 0;
         rightChargeTotal = 0;
+    }
+
+    // Clear method
+    public void clear() {
+        leftFormulas.clear();
+        rightFormulas.clear();
+    }
+
+    // To String
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Equation is ").append(isBalanced() ? "balanced" : "not balanced").append("\n");
+
+        sb.append("Left side:\n");
+        for (Formula formula : leftFormulas) {
+            sb.append(formula.getMultiplier()).append(formula.toString()).append(")\n");
+        }
+
+        sb.append("Right side:\n");
+        for (Formula formula : rightFormulas) {
+            sb.append(formula.getMultiplier()).append(formula.toString()).append(")\n");
+        }
+
+        return sb.toString();
     }
 
 }

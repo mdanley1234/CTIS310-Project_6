@@ -11,9 +11,12 @@ public class Formula {
     private int charge; // Charge of formula without multipler
     private double molarMass; // Molar mass of formula without multiplier
     private int multiplier; // Formula multiplier
+    private String formatString; // Formatted formulaString without multiplier
 
     public Formula(String formulaString) {
         buildFormula(formulaString);
+        // Remove the multiplier from the formulaString to create formatString
+        formatString = formulaString.replaceFirst("^\\d+", "");
     }
 
     private void buildFormula(String formulaString) {
@@ -114,6 +117,11 @@ public class Formula {
 
     public int getMultiplier() {
         return multiplier;
+    }
+
+    @Override
+    public String toString() {
+        return formatString;
     }
 
 }
